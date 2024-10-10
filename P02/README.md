@@ -166,38 +166,28 @@ public class DistanceToObject : MonoBehaviour
 
 **6. Selecciona tres posiciones en tu escena a través de un objeto invisible (marcador) que incluya 3 vectores numéricos para configurar posiciones en las que quieres ubicar los objetos en respuesta a pulsar la barra espaciadora. Estos vectores representan un desplazamiento respecto a la posición original del objeto. Crea un script que ubique en las posiciones configuradas cuando el usuario pulse la barra espaciadora.**
 
-Para hacer el marcador creé un objeto invisible y otros 3 objetos invisibles hijos de este tal que así:
+Para hacer el marcador creé un objeto invisible.
 
-![marcador](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P02/Im%C3%A1genes/marker_Ej-6.png)
-
-Lo que hago en el script es obtener la posición de esos 3 marcadores y cada vez que el usuario le da al espacio muevo el objeto cuyo script está asociado a una de esas 3 posiciones:
+Lo que hago en el script es obtener la posición de los 3 objetos y cada vez que el usuario mantiene el espacio muevo los objetos del script haciendo el desplazamiento teniendo en cuenta los vectores inicializados:
 
 ```C#
-public class MoveObjectToMarker : MonoBehaviour {
-  public GameObject marker;
-  private Vector3[] markerPositions;
-  private int indexPosition = 0;
-
-    // Start is called before the first frame update
+public class MoveObject : MonoBehaviour {
+  public Vector3 offset1 = new Vector3(0.1f, 0.2f, 0.3f);
+  public Vector3 offset2 = new Vector3(0.4f, 0.5f, 0.6f);
+  public Vector3 offset3 = new Vector3(0.7f, 0.8f, 0.9f); 
+  private GameObject firstObject;
+  private GameObject secondObject;
+  private GameObject thirdObject;
   void Start() {
-    // Get the number of child objects
-    int childCount = marker.transform.childCount;
-    // Initialize the markerPositions array
-    markerPositions = new Vector3[childCount];
-    // Store the positions of the child objects
-    for (int i = 0; i < childCount; i++) {
-      markerPositions[i] = marker.transform.GetChild(i).position;
-    }
+    firstObject = GameObject.Find("Cube_1");
+    secondObject = GameObject.Find("Cube_2");
+    thirdObject = GameObject.Find("Cube_3");
   }
-
-    // Update is called once per frame
   void Update() {
-    // Check if the space key is pressed
-    if (Input.GetKeyDown(KeyCode.Space)) {
-      // Move the object to the current marker position
-      transform.position = markerPositions[indexPosition];
-      // Update the index to the next position
-      indexPosition = (indexPosition + 1) % markerPositions.Length;
+    if (Input.GetAxis("Jump") > 0) {
+      firstObject.transform.position += offset1 * Time.deltaTime;
+      secondObject.transform.position += offset2 * Time.deltaTime;
+      thirdObject.transform.position += offset3 * Time.deltaTime;
     }
   }
 }
@@ -205,7 +195,7 @@ public class MoveObjectToMarker : MonoBehaviour {
 
 El resultado es el siguiente:
 
-![changingPos](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P02/Im%C3%A1genes/changing_pos-Ej_6.gif)
+![cubos](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P02/Im%C3%A1genes/cubos_moviendose.gif)
 
 **7. Cambia el color del cilindro cuando el usuario pulse la tecla C, cambia el color del cubo cuando el usuario pulse la flecha arriba.**
 
