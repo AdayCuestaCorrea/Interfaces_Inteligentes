@@ -70,6 +70,7 @@ He añadido 1 de drag a la esfera (he devuelto el estado de la masa al original,
 
 ### Situación 8
 Se nos pide:
+
 **El plano es un objeto físico. El cubo es un objeto físico y la esfera no es física y es Trigger. En este caso, todos los objetos deben tener Rigidbody.**
 
 Cuando eliminamos el rigidbody de la esfera y en el collider activamos trigger, la esfera se mantiene en el aire mientras que el plano y el cubo caen.
