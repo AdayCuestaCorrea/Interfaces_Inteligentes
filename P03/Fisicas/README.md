@@ -213,4 +213,6 @@ El resultado fue este:
 
 ### Ejercicio 10
 
-- 
+- Configura el cubo como un objeto cinemático y la esfera como un objeto físico. Adapta los scripts del ejercicio 9 para obtener el mismo comportamiento.
+
+Tal y como está hecho el script no es necesario modificar nada pues se sigue mostrando por consola la colisión.
