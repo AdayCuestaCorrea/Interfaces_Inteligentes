@@ -69,3 +69,103 @@ Ahora procederé a explicar las situaciones que se nos pedía realizar:
 - **Usar una velocidad menor que 1**: El cubo se mueve más lento.
 - **La posición del cubo tiene y>0**: No pasa nada, se mueve a la misma velocidad independientemente del valor de la y.
 - **Intercambiar el movimiento relativo al sistema de referencia local y el mundial**: Para realizar esto tuve que modificar un poco el script original y añadir Space.World a los parametros del translate, después de eso ejecuté el script y no noté ningún cambio significativo.
+
+### Ejercicio 4
+
+- Mueve el cubo con las teclas de flecha arriba-abajo, izquierda-derecha a la velocidad speed. Cada uno de estos ejes implican desplazamientos en el eje vertical y horizontal respectivamente. Mueve la esfera con las teclas w-s (movimiento vertical) a-d (movimiento horizontal).
+
+He creado el siguiente script:
+
+```Cs
+public class MoveObject : MonoBehaviour {
+  public KeyCode upKey = KeyCode.UpArrow;
+  public KeyCode downKey = KeyCode.DownArrow;
+  public KeyCode leftKey = KeyCode.LeftArrow;
+  public KeyCode rightKey = KeyCode.RightArrow;
+  public float speed = 1.0f;
+  void Update() {
+    if (Input.GetKey(upKey)) {
+      transform.Translate(Vector3.forward * speed * Time.deltaTime);
+    } else if (Input.GetKey(downKey)) {
+      transform.Translate(Vector3.back * speed * Time.deltaTime);
+    } else if (Input.GetKey(leftKey)) {
+      transform.Translate(Vector3.left * speed * Time.deltaTime);
+    } else if (Input.GetKey(rightKey)) {
+      transform.Translate(Vector3.right * speed * Time.deltaTime);
+    }
+  }
+}
+```
+
+Como las teclas de movimiento son publicas, en la esfera simplemente cambie las flechas por wasd.
+
+![teclas_esfera](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/esfera_Ej-4.png)
+
+El resultado de la ejecución del script es el siguiente:
+
+![moviendo_objetos](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/Objetos-Moviendose_Ej-4.gif)
+
+### Ejercicio 5
+
+- Adapta el movimiento en el ejercicio 4 para que sea proporcional al tiempo transcurrido durante la generación del frame.
+
+Esto ya está hecho en el ejercicio anterior.
+
+### Ejercicio 6
+
+- Adapta el movimiento en el ejercicio 5 para que el cubo se mueva hacia la posición de la esfera. Debes considerar, que el avance no debe estar influenciado por cuánto de lejos o cerca estén los dos objetos.
+
+Hemos creado el siguiente script para obtener el resultado esperado:
+
+```Cs
+public class MoveObjectToSphere : MonoBehaviour {
+  private GameObject sphere;
+  private Vector3 spherePosition;
+  public float speed = 1.0f;
+  void Start() { // Cambiado a 'Start' con mayúscula
+    sphere = GameObject.Find("Sphere");
+  }
+  void Update() {
+    spherePosition = sphere.transform.position;
+    Vector3 direction = (spherePosition - transform.position).normalized;
+    direction.y = 0; // Mantener la componente Y en cero
+    transform.Translate(direction * speed * Time.deltaTime);
+  }
+}
+```
+
+El resultado obtenido es el siguiente:
+
+![cubo_a_esfera](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/Moviendose-a-la-esfera_Ej-6.gif)
+
+### Ejercicio 7
+
+- Adapta el movimiento en el ejercicio 6 de forma que el cubo gire hacia la esfera. Realiza pruebas cambiando la posición de la esfera mediante las teclas awsd
+
+He creado un nuevo script a partir del anterior tal que así:
+
+```Cs
+public class LookWhileMoving : MonoBehaviour {
+  private GameObject sphere;
+  private Vector3 spherePosition;
+  public float speed = 1.0f;
+  void Start() { // Cambiado a 'Start' con mayúscula
+    sphere = GameObject.Find("Sphere");
+  }
+  void Update() {
+    spherePosition = sphere.transform.position;
+    Vector3 direction = (spherePosition - transform.position).normalized;
+    direction.y = 0; // Mantener la componente Y en cero para el movimiento
+    transform.Translate(direction * speed * Time.deltaTime, Space.World);
+    transform.LookAt(spherePosition);
+  }
+}
+```
+
+He tenido que especificar que el movimiento sea relativo al espacio del mundo. El resultado es el siguiente:
+
+![mirando_esfera](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/mirando-cubo_Ej-7.gif)
+
+### Ejercicio 8
+
+- Utilizar el eje “Horizontal” para girar el objetivo y que avance siempre en la dirección hacia adelante.
