@@ -169,3 +169,48 @@ He tenido que especificar que el movimiento sea relativo al espacio del mundo. E
 ### Ejercicio 8
 
 - Utilizar el eje “Horizontal” para girar el objetivo y que avance siempre en la dirección hacia adelante.
+
+Para realizar esto hemos girado el cubo y creado el siguiente script:
+
+```Cs
+public class MoveForward : MonoBehaviour {
+  public float speed = 5.0f;
+  public float rotationSpeed = 100.0f;
+
+  void Update() {
+    float horizontalInput = Input.GetAxis("Horizontal");
+    transform.Rotate(Vector3.up, horizontalInput * rotationSpeed * Time.deltaTime);
+    transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
+  }
+}
+```
+
+El resultado obtenido es el siguiente:
+
+![cubo_girado](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/cubo-girado_Ej-8.gif)
+
+### Ejercicio 9
+
+- Configura el cilindro como un objeto físico, cuando el cubo o la esfera colisionen con él se debe mostrar un mensaje en consola con la etiqueta del objeto que haya colisionado.
+
+Para realizar esto, le añadí el componente rigidbody a todos los objetos de la escena y les quité la gravedad para que no se cayeran.
+
+El Script que creé es el siguiente:
+
+```Cs
+public class Collision : MonoBehaviour {
+  void OnCollisionEnter(UnityEngine.Collision collision) {
+    Debug.Log("El " + gameObject.name + " colisionó con: " + collision.gameObject.name);
+  }
+}
+```
+
+El resultado fue este:
+
+![colisiones](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/colisiones_Ej-9.gif)
+
+![consola_ej9](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/consola_Ej-9.png)
+
+### Ejercicio 10
+
+- 
