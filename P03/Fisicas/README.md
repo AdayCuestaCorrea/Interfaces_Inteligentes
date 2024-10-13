@@ -216,3 +216,117 @@ El resultado fue este:
 - Configura el cubo como un objeto cinemático y la esfera como un objeto físico. Adapta los scripts del ejercicio 9 para obtener el mismo comportamiento.
 
 Tal y como está hecho el script no es necesario modificar nada pues se sigue mostrando por consola la colisión.
+
+### Ejercicio 11
+
+- Configura el cilindro como un objeto de tipo Trigger. Adapta los scripts de los ejercicios anteriores para obtener el mismo comportamiento.
+
+Después de activar is Trigger en el Capsule Collider del cilindro creé otro script nuevo para este ejercicio:
+
+```Cs
+public class TriggerCollision : MonoBehaviour {
+  void OnTriggerEnter(UnityEngine.Collider other) {
+    Debug.Log("El " + gameObject.name + " tuvo una Trigger collision con: " + other.gameObject.name);
+  }
+}
+```
+
+El resultado fue el siguiente:
+
+![colision_trigger](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/colisiones_Ej-11.gif)
+![consola_ej11](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/consola_Ej-11.png)
+
+### Ejercicio 12
+
+- Agrega un cilindro de un color diferente al que ya hay en la escena y configúralo como un objeto físico. Selecciona un conjunto de teclas que te permitan controlar su movimiento por la escena y prográmale un movimiento que permita dirigirlo hacia la esfera. Prueba diferentes configuraciones de la esfera física con masa 10 veces mayor que el cilindro, física con masa 10 veces menor que el cilindro, cinemática y trigger. También prueba la configuración del cilindro de forma que su fricción se duplique o no.
+
+Después de crear el cilindro, le asigné el script de movimiento que hicimos en el ejercicio 4 aunque tuve que modificarlo un poco porque ahora estamos trabajando con rigidbodies:
+```Cs
+public class MoveRigidBody : MonoBehaviour {
+  public KeyCode upKey = KeyCode.W;
+  public KeyCode downKey = KeyCode.S;
+  public KeyCode leftKey = KeyCode.A;
+  public KeyCode rightKey = KeyCode.D;
+  public float speed = 1.0f;
+  private Rigidbody rb;
+  void Start() {
+    rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
+  }
+  void FixedUpdate() {
+    Vector3 movement = Vector3.zero;
+    if (Input.GetKey(upKey)) {
+      movement += Vector3.forward;
+    } 
+    if (Input.GetKey(downKey)) {
+      movement += Vector3.back;
+    } 
+    if (Input.GetKey(leftKey)) {
+      movement += Vector3.left;
+    } 
+    if (Input.GetKey(rightKey)) {
+      movement += Vector3.right;
+    }
+    rb.MovePosition(transform.position + movement * speed * Time.fixedDeltaTime);
+  }
+}
+```
+y modifiqué el del ejercicio 7 para que se mueva de manera automática hacia la esfera si pulsas la tecla *h*:
+```Cs
+public class ActiveAutomaticMovement : MonoBehaviour {
+  private GameObject sphere;
+  private Vector3 spherePosition;
+  public float speed = 1.0f;
+  public KeyCode toggleKey = KeyCode.H;
+  private bool isMoving = false;
+  private Rigidbody rb;
+  void Start() {
+    sphere = GameObject.Find("Sphere");
+    rb = GetComponent<Rigidbody>(); // Obtener el componente Rigidbody
+  }
+  void Update() {
+    // Verificar si se presiona la tecla 'H'
+    if (Input.GetKeyDown(toggleKey)) {
+      isMoving = !isMoving; // Alternar el estado de movimiento
+    }
+  }
+  void FixedUpdate() {
+    // Ejecutar el movimiento solo si isMoving es verdadero
+    if (isMoving) {
+      spherePosition = sphere.transform.position;
+      Vector3 direction = (spherePosition - transform.position).normalized;
+      rb.MovePosition(transform.position + direction * speed * Time.fixedDeltaTime);
+      Vector3 lookAtPosition = new Vector3(spherePosition.x, transform.position.y, spherePosition.z);
+      transform.LookAt(lookAtPosition);
+    }
+  }
+}
+```
+
+Nótese que he utilizao MovePosition para mover el objeto rígido. El resultado de las diferentes ejecuciones fueron los siguientes:
+1. Esfera física con masa 10 veces mayor que el cilindro (100 de masa):
+
+![esfera_mas_masa](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/esfera-masa_Ej-12.gif)
+
+El cilindro apenas puede mover a la esfera.
+
+2. Esfera con masa 10 veces menor que el cilindro (1 de masa):
+
+![esfera_menos_masa](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/esfera-poca-masa_Ej-12.gif)
+
+No le supone problema alguno mover a la esfera.
+
+3. Esfera cinemática:
+
+![esfera_cinemática](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/esfera-cinematica_Ej-12.gif)
+
+El cilindro es incapaz de mover la esfera.
+
+4. Esfera Trigger:
+
+![esfera_trigger](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P03/Fisicas/Imagenes/esfera-trigger_Ej-12.gif)
+
+El cilindro traspasa la esfera, aunque tenga el modo cinemático activado.
+
+5. Cilindro con fricción duplicada:
+
+En este caso no noté ninguna diferencia por mucho que aumentara la fricción del cilindro.
