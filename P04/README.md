@@ -137,13 +137,13 @@ public class MoveObjectToCylinder : MonoBehaviour {
 
 Aquí hay un ejemplo de la ejecución del programa:
 
-![esferas_moviendose](Imágenes\Esfera_Moviendose_Ej-1.gif)
+![esferas_moviendose](Imágenes/Esfera_Moviendose_Ej-1.gif)
 
 ### Ejercicio 2
 
 - Sustituye los objetos geométricos por arañas para las esferas y huevo para el cilindro que encontrarás en el enlace.
 
-![Escena_Arañas](Imágenes\Escena_Arañas_Ej-2.gif)
+![Escena_Arañas](Imágenes/Escena_Arañas_Ej-2.gif)
 
 ### Ejercicio 3
 
@@ -209,7 +209,7 @@ public class SpiderType1 : MonoBehaviour {
 
 El resultado es el siguiente:
 
-![arañas_convertidas](Imágenes\Arañas_Cambiando_Ej-3.gif)
+![arañas_convertidas](Imágenes/Arañas_Cambiando_Ej-3.gif)
 
 Para conseguirlo creé 2 arañas que no se ven en escena, una roja y otra verde y cuando tocan el huevo se convierten en una de esas arañas, lo logré gracias a este script:
 
@@ -347,7 +347,7 @@ public class LookAtObject : MonoBehaviour {
 
 El resultado es el siguiente:
 
-![Arañas_Tp](Imágenes\Arañas_Tp_Ej-4.gif)
+![Arañas_Tp](Imágenes/Arañas_Tp_Ej-4.gif)
 
 ### Ejercicio 5
 
@@ -402,11 +402,11 @@ public class EggCollisionNotifier : MonoBehaviour {
 
 Aquí tenemos un ejemplo de la ejecución del programa:
 
-![Arañas_Puntos](Imágenes\Arañas_Puntos_Ej-5.gif)
+![Arañas_Puntos](Imágenes/Arañas_Puntos_Ej-5.gif)
 
 Esto es lo que se ve en la consola:
 
-![Puntos](Imágenes\Puntos_Ej-5.png)
+![Puntos](Imágenes/Puntos_Ej-5.png)
 
 ### Ejercicio 6
 
@@ -426,7 +426,7 @@ public class ShowScore : MonoBehaviour {
 
 El resultado es el siguiente:
 
-![puntuación_pantalla](Imágenes\Puntos_Pantalla_Ej-6.gif)
+![puntuación_pantalla](Imágenes/Puntos_Pantalla_Ej-6.gif)
 
 ### Ejercicio 7
 
@@ -463,11 +463,11 @@ public class ScoreReward : MonoBehaviour {
 
 El gif en cuestión es el siguiente:
 
-![yippeee](Imágenes\recompensa-yippee.gif)
+![yippeee](Imágenes/recompensa-yippee.gif)
 
 Este es el resultado:
 
-![recompensa](Imágenes\recompensa_Ej-7.gif)
+![recompensa](Imágenes/recompensa_Ej-7.gif)
 
 ### Ejercicio 8
 
