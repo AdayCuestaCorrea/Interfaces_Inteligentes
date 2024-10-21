@@ -473,7 +473,111 @@ Este es el resultado:
 
 - Genera una escena que incluya elementos que se ajusten a la escena del prototipo y alguna de las mecánicas anteriores.
 
+He creado la siguiente escena:
 
+![escena-ej8](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P04/Im%C3%A1genes/Escena_Ej-8.jpg)
+
+En la escena tenemos una puerta que podemos abrir cuando nos acercamos y pulsamos la E, esto es gracias a que la puerta tiene 2 colliders, uno para trigger con una hitbox mayor y otra para no poder atravesarla, además posee un rigidbody.
+
+```Cs
+public class OpenDoor : MonoBehaviour {
+  private GameObject door;
+  public float openAngle = 90f;
+  public float openSpeed = 2f;
+  private bool isOpen = false; 
+  private bool isPlayerNearby = false;
+  private Quaternion closedRotation; 
+  private Quaternion openRotation;
+
+  void Start() {
+    door = this.gameObject;
+    closedRotation = door.transform.rotation;
+    openRotation = closedRotation * Quaternion.Euler(0, openAngle, 0);
+  }
+
+  void Update() {
+    if (isPlayerNearby && Input.GetKeyDown(KeyCode.E)) {
+      isOpen = !isOpen;
+      if (isOpen) {
+        DoorListener.DoorOpened();
+      }
+    }
+    if (isOpen) {
+      door.transform.rotation = Quaternion.Slerp(door.transform.rotation, openRotation, Time.deltaTime * openSpeed);
+    } else {
+      door.transform.rotation = Quaternion.Slerp(door.transform.rotation, closedRotation, Time.deltaTime * openSpeed);
+    }
+  }
+
+  void OnTriggerEnter(Collider other) {
+    if (other.CompareTag("Player")) {
+      isPlayerNearby = true;
+    }
+  }
+
+  void OnTriggerExit(Collider other) {
+    if (other.CompareTag("Player")) {
+      isPlayerNearby = false;
+    }
+  }
+}
+```
+
+Por otro lado, cuando la puerta es abierta se lanza un evento:
+
+```Cs
+public class DoorListener : MonoBehaviour {
+  public delegate void DoorOpenedHandler();
+  public static event DoorOpenedHandler OnDoorOpened;
+  public static void DoorOpened() {
+    OnDoorOpened?.Invoke();
+  }
+}
+```
+
+Cuando la araña recibe el evento, va en busca del jugador para atacarlo:
+
+```Cs
+public class AttackSpiders : MonoBehaviour {
+  public float speed = 3.0f;
+  private Transform player; 
+  private Animator animator;
+  private Rigidbody rb; 
+  private bool isFollowing = false; 
+
+  void Start() {
+    player = GameObject.FindGameObjectWithTag("Player").transform;
+    animator = GetComponent<Animator>();
+    rb = GetComponent<Rigidbody>();
+  }
+  void FixedUpdate() {
+    if (isFollowing) {
+      Vector3 direction = (player.position - transform.position).normalized;
+      Vector3 newPosition = transform.position + direction * speed * Time.deltaTime;
+      rb.MovePosition(newPosition);
+      animator.SetBool("IsRunning", true);
+    }
+  }
+  void OnCollisionEnter(UnityEngine.Collision collision) {
+    if (collision.gameObject.CompareTag("Player")) {
+      animator.SetTrigger("Attack");
+    }
+  }
+  void OnEnable() {
+    DoorListener.OnDoorOpened += StartFollowing;
+  }
+  void OnDisable() {
+    DoorListener.OnDoorOpened -= StartFollowing;
+  }
+  void StartFollowing() {
+    isFollowing = true;
+  }
+}
+```
+
+El resultado de la ejecución de todo esto es el siguiente:
+
+![player_atacado](https://github.com/AdayCuestaCorrea/Interfaces_Inteligentes/blob/main/P04/Im%C3%A1genes/player_atacado_Ej-8.gif)
 
 ### Ejercicio 9
 
